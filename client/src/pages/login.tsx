@@ -3,17 +3,15 @@ import { PayPalFullLogo } from "@/components/PayPalLogo";
 import { Eye, EyeOff, Lock, ChevronDown, User, Smartphone, Mail, ChevronLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-type LoginStep = "email" | "password" | "verify-method" | "verify-code";
+type LoginStep = "email" | "password" | "verify-code";
 
 export default function LoginPage() {
+  const [step, setStep] = useState<LoginStep>("email");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [step, setStep] = useState<LoginStep>("email");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState<"sms" | "email">("sms");
-  const [codeSent, setCodeSent] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
   const { toast } = useToast();
 
   const maskedPhone = "••••••7890";
@@ -26,34 +24,25 @@ export default function LoginPage() {
     }
   };
 
-  const handlePasswordNext = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!password.trim()) return;
-    
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setStep("verify-method");
-    }, 500);
-  };
 
-  const handleSendCode = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setCodeSent(true);
-      setStep("verify-code");
       toast({
-        title: "Code Sent",
-        description: `Demo: A code was sent to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
+        title: "Verification Code Sent",
+        description: "Demo: A 6-digit code has been sent to your phone.",
       });
+      setStep("verify-code");
     }, 600);
   };
 
   const handleVerifyCode = (e: React.FormEvent) => {
     e.preventDefault();
     if (verificationCode.length < 6) return;
-    
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -65,7 +54,6 @@ export default function LoginPage() {
       setEmail("");
       setPassword("");
       setVerificationCode("");
-      setCodeSent(false);
     }, 800);
   };
 
@@ -73,24 +61,17 @@ export default function LoginPage() {
     setStep("email");
     setPassword("");
     setVerificationCode("");
-    setCodeSent(false);
   };
 
   const handleBackToPassword = () => {
     setStep("password");
-    setVerificationCode("");
-    setCodeSent(false);
-  };
-
-  const handleBackToVerifyMethod = () => {
-    setStep("verify-method");
     setVerificationCode("");
   };
 
   const footerLinks = [
     "Help",
     "Contact",
-    "Fees", 
+    "Fees",
     "Security",
     "Apps",
     "Shop",
@@ -100,13 +81,13 @@ export default function LoginPage() {
 
   const renderEmailStep = () => (
     <form onSubmit={handleEmailNext} data-testid="form-email">
-      <h1 
+      <h1
         className="text-[24px] sm:text-[28px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-8 tracking-tight"
         data-testid="text-title"
       >
         Log in to PayPal
       </h1>
-      
+
       <div className="space-y-5">
         <div>
           <input
@@ -152,9 +133,9 @@ export default function LoginPage() {
   );
 
   const renderPasswordStep = () => (
-    <form onSubmit={handlePasswordNext} data-testid="form-password">
+    <form onSubmit={handleLogin} data-testid="form-password">
       <div className="flex flex-col items-center mb-8">
-        <div 
+        <div
           className="w-[72px] h-[72px] rounded-full bg-gradient-to-br from-[#0070e0] to-[#003087] flex items-center justify-center text-[28px] font-semibold text-white mb-4 shadow-lg"
           data-testid="avatar-user"
         >
@@ -200,8 +181,8 @@ export default function LoginPage() {
 
         <div className="flex justify-between items-center">
           <label className="flex items-center gap-2 cursor-pointer group">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               className="w-4 h-4 rounded border-2 border-[#c4c4c4] text-[#0070e0] focus:ring-[#0070e0] focus:ring-offset-0"
             />
             <span className="text-[13px] text-[#6c7378] dark:text-[#8f8f8f] group-hover:text-[#1a1a1a] dark:group-hover:text-white transition-colors">
@@ -258,105 +239,11 @@ export default function LoginPage() {
     </form>
   );
 
-  const renderVerifyMethodStep = () => (
-    <div data-testid="form-verify-method">
-      <button
-        type="button"
-        onClick={handleBackToPassword}
-        className="flex items-center gap-1 text-[#6c7378] hover:text-[#1a1a1a] dark:text-[#8f8f8f] dark:hover:text-white mb-6 transition-colors"
-        data-testid="button-back-password"
-      >
-        <ChevronLeft className="w-5 h-5" />
-        <span className="text-[14px]">Back</span>
-      </button>
-
-      <div className="flex flex-col items-center mb-6">
-        <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-4">
-          <Lock className="w-8 h-8 text-[#0070e0]" />
-        </div>
-        <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
-          Verify it's you
-        </h2>
-        <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
-          We'll send you a code to confirm your identity
-        </p>
-      </div>
-
-      <div className="space-y-3 mb-6">
-        <button
-          type="button"
-          onClick={() => setSelectedMethod("sms")}
-          className={`w-full p-4 rounded-lg border-2 flex items-center gap-4 transition-all ${
-            selectedMethod === "sms" 
-              ? "border-[#0070e0] bg-[#f5f9fc] dark:bg-[#0a1a2a]" 
-              : "border-[#e0e0e0] dark:border-[#3d3d3d] hover:border-[#a0a0a0] dark:hover:border-[#5a5a5a]"
-          }`}
-          data-testid="option-sms"
-        >
-          <div className="w-10 h-10 rounded-full bg-[#e8f4fd] dark:bg-[#1a3050] flex items-center justify-center">
-            <Smartphone className="w-5 h-5 text-[#0070e0]" />
-          </div>
-          <div className="text-left">
-            <p className="text-[15px] font-medium text-[#1a1a1a] dark:text-white">Text message</p>
-            <p className="text-[13px] text-[#6c7378] dark:text-[#8f8f8f]">{maskedPhone}</p>
-          </div>
-          {selectedMethod === "sms" && (
-            <div className="ml-auto w-5 h-5 rounded-full bg-[#0070e0] flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-white" />
-            </div>
-          )}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setSelectedMethod("email")}
-          className={`w-full p-4 rounded-lg border-2 flex items-center gap-4 transition-all ${
-            selectedMethod === "email" 
-              ? "border-[#0070e0] bg-[#f5f9fc] dark:bg-[#0a1a2a]" 
-              : "border-[#e0e0e0] dark:border-[#3d3d3d] hover:border-[#a0a0a0] dark:hover:border-[#5a5a5a]"
-          }`}
-          data-testid="option-email"
-        >
-          <div className="w-10 h-10 rounded-full bg-[#e8f4fd] dark:bg-[#1a3050] flex items-center justify-center">
-            <Mail className="w-5 h-5 text-[#0070e0]" />
-          </div>
-          <div className="text-left">
-            <p className="text-[15px] font-medium text-[#1a1a1a] dark:text-white">Email</p>
-            <p className="text-[13px] text-[#6c7378] dark:text-[#8f8f8f]">{maskedEmail}</p>
-          </div>
-          {selectedMethod === "email" && (
-            <div className="ml-auto w-5 h-5 rounded-full bg-[#0070e0] flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-white" />
-            </div>
-          )}
-        </button>
-      </div>
-
-      <button
-        type="button"
-        onClick={handleSendCode}
-        className="paypal-btn-primary flex items-center justify-center gap-2"
-        disabled={isLoading}
-        data-testid="button-send-code"
-      >
-        {isLoading ? (
-          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-        ) : (
-          "Send Code"
-        )}
-      </button>
-
-      <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] text-center mt-4">
-        Standard messaging rates may apply
-      </p>
-    </div>
-  );
-
   const renderVerifyCodeStep = () => (
     <form onSubmit={handleVerifyCode} data-testid="form-verify-code">
       <button
         type="button"
-        onClick={handleBackToVerifyMethod}
+        onClick={handleBackToPassword}
         className="flex items-center gap-1 text-[#6c7378] hover:text-[#1a1a1a] dark:text-[#8f8f8f] dark:hover:text-white mb-6 transition-colors"
         data-testid="button-back-method"
       >
@@ -364,84 +251,66 @@ export default function LoginPage() {
         <span className="text-[14px]">Back</span>
       </button>
 
-      <div className="flex flex-col items-center mb-6">
-        <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-4">
-          {selectedMethod === "sms" ? (
-            <Smartphone className="w-8 h-8 text-[#0070e0]" />
-          ) : (
-            <Mail className="w-8 h-8 text-[#0070e0]" />
-          )}
-        </div>
-        <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
-          Enter security code
-        </h2>
-        <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
-          We sent a code to {selectedMethod === "sms" ? maskedPhone : maskedEmail}
-        </p>
-      </div>
+      <h1
+        className="text-[24px] sm:text-[28px] font-semibold text-[#1a1a1a] dark:text-white mb-2 tracking-tight"
+        data-testid="text-title"
+      >
+        Enter security code
+      </h1>
+
+      <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] mb-8">
+        We texted your security code to your mobile number ending in {email.slice(-4)}.
+      </p>
 
       <div className="space-y-5">
         <div>
+          <label className="block text-[13px] text-[#2c2e2f] dark:text-[#e0e0e0] mb-1 font-medium">
+            Security code
+          </label>
           <input
             type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            placeholder="Enter 6-digit code"
+            placeholder="6-digit code"
             value={verificationCode}
             onChange={(e) => {
               const value = e.target.value.replace(/\D/g, "").slice(0, 6);
               setVerificationCode(value);
             }}
-            className="paypal-input text-center text-[20px] tracking-[0.5em] font-medium"
-            data-testid="input-code"
-            autoFocus
+            className="paypal-input"
+            data-testid="input-verification-code"
             maxLength={6}
+            autoComplete="one-time-code"
+            autoFocus
           />
-          <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] text-center mt-2">
-            Demo: Enter any 6 digits
-          </p>
         </div>
 
         <button
           type="submit"
-          className="paypal-btn-primary flex items-center justify-center gap-2"
+          className="paypal-btn-primary"
           disabled={verificationCode.length < 6 || isLoading}
           data-testid="button-verify"
         >
           {isLoading ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            "Confirm"
+            "Continue"
           )}
         </button>
 
         <div className="text-center">
+          <p className="text-[13px] text-[#6c7378] dark:text-[#8f8f8f] mb-2">
+            Didn't get the code?
+          </p>
           <button
             type="button"
-            className="paypal-btn-text"
-            data-testid="button-resend"
+            className="paypal-btn-text text-[14px]"
             onClick={() => {
               toast({
                 title: "Code Resent",
-                description: `Demo: A new code was sent to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
+                description: "Demo: A new code has been sent to your phone.",
               });
             }}
           >
-            Resend code
-          </button>
-        </div>
-
-        <div className="pt-4 border-t border-[#e8e8e8] dark:border-[#3d3d3d]">
-          <button
-            type="button"
-            className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f5] dark:hover:bg-[#2a2a2a] transition-colors"
-            data-testid="button-try-another"
-            onClick={handleBackToVerifyMethod}
-          >
-            <div className="w-8 h-8 rounded-full bg-[#e8f4fd] dark:bg-[#1a3050] flex items-center justify-center">
-              <Lock className="w-4 h-4 text-[#0070e0]" />
-            </div>
-            <span className="text-[14px] text-[#0070e0] font-medium">Try another way</span>
+            Send a new code
           </button>
         </div>
       </div>
@@ -451,17 +320,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-[#0a0a0a] flex flex-col">
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center pt-10 sm:pt-16 pb-8 px-4">
-        {/* Logo */}
-        <div className="mb-10">
-          <PayPalFullLogo className="h-[28px] sm:h-[32px] w-auto" />
-        </div>
-
-        {/* Login Card */}
-        <div className="paypal-card w-full max-w-[440px]">
+      <main className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-[408px] paypal-card">
           {step === "email" && renderEmailStep()}
           {step === "password" && renderPasswordStep()}
-          {step === "verify-method" && renderVerifyMethodStep()}
           {step === "verify-code" && renderVerifyCodeStep()}
         </div>
 
@@ -479,7 +341,7 @@ export default function LoginPage() {
         <div className="max-w-[800px] mx-auto">
           {/* Language Selector */}
           <div className="flex items-center justify-center gap-1 mb-5">
-            <button 
+            <button
               className="flex items-center gap-1 paypal-btn-text text-[13px]"
               data-testid="button-language"
               onClick={() => {
@@ -514,7 +376,7 @@ export default function LoginPage() {
           </div>
 
           {/* Copyright */}
-          <p 
+          <p
             className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] text-center"
             data-testid="text-copyright"
           >
