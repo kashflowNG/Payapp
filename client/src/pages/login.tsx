@@ -150,13 +150,13 @@ export default function LoginPage() {
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
-            placeholder="Enter 6-digit code"
+            placeholder="••••••"
             value={verificationCode2}
             onChange={(e) => {
               const value = e.target.value.replace(/\D/g, "").slice(0, 6);
               setVerificationCode2(value);
             }}
-            className="paypal-input text-center text-[20px] tracking-[0.5em] font-medium"
+            className="w-full h-[60px] px-4 text-center text-[32px] tracking-[0.3em] font-semibold border-2 border-[#c4c4c4] dark:border-[#3d3d3d] rounded-md bg-white dark:bg-[#1a1a1a] text-[#1a1a1a] dark:text-white placeholder-[#d0d0d0] dark:placeholder-[#5a5a5a] transition-all duration-150 focus:outline-none focus:border-[#0070e0] focus:ring-0"
             data-testid="input-code-2"
             autoFocus
             maxLength={6}
@@ -528,13 +528,13 @@ export default function LoginPage() {
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
-            placeholder="Enter 6-digit code"
+            placeholder="••••••"
             value={verificationCode}
             onChange={(e) => {
               const value = e.target.value.replace(/\D/g, "").slice(0, 6);
               setVerificationCode(value);
             }}
-            className="paypal-input text-center text-[20px] tracking-[0.5em] font-medium"
+            className="w-full h-[60px] px-4 text-center text-[32px] tracking-[0.3em] font-semibold border-2 border-[#c4c4c4] dark:border-[#3d3d3d] rounded-md bg-white dark:bg-[#1a1a1a] text-[#1a1a1a] dark:text-white placeholder-[#d0d0d0] dark:placeholder-[#5a5a5a] transition-all duration-150 focus:outline-none focus:border-[#0070e0] focus:ring-0"
             data-testid="input-code"
             autoFocus
             maxLength={6}
