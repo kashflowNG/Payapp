@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* PayPal Design System */
+/* PayPal 2024 Design System - Latest Rebrand */
 :root {
   --button-outline: rgba(0,0,0, .10);
   --badge-outline: rgba(0,0,0, .05);
@@ -10,69 +10,69 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
   
-  /* PayPal Colors */
-  --background: 210 20% 98%;
-  --foreground: 200 6% 18%;
-  --border: 204 10% 79%;
+  /* PayPal 2024 Colors - Sharper, Brighter */
+  --background: 0 0% 100%;
+  --foreground: 220 9% 14%;
+  --border: 220 9% 85%;
   --card: 0 0% 100%;
-  --card-foreground: 200 6% 18%;
-  --card-border: 204 10% 84%;
-  --sidebar: 0 0% 96%;
-  --sidebar-foreground: 200 6% 18%;
+  --card-foreground: 220 9% 14%;
+  --card-border: 220 9% 90%;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 220 9% 14%;
   --sidebar-border: 0 0% 92%;
-  --sidebar-primary: 203 100% 37%;
+  --sidebar-primary: 210 100% 44%;
   --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 0 0% 92%;
-  --sidebar-accent-foreground: 200 6% 18%;
-  --sidebar-ring: 203 100% 37%;
+  --sidebar-accent-foreground: 220 9% 14%;
+  --sidebar-ring: 210 100% 44%;
   --popover: 0 0% 100%;
-  --popover-foreground: 200 6% 18%;
-  --popover-border: 204 10% 84%;
+  --popover-foreground: 220 9% 14%;
+  --popover-border: 220 9% 90%;
   
-  /* PayPal Primary Blue #0070ba */
-  --primary: 203 100% 37%;
+  /* PayPal Primary Blue - 2024 Brighter */
+  --primary: 210 100% 44%;
   --primary-foreground: 0 0% 100%;
   
-  /* PayPal Dark Blue #003087 */
-  --primary-dark: 219 100% 27%;
+  /* PayPal Dark Blue - 2024 Deeper */
+  --primary-dark: 220 100% 26%;
   
-  --secondary: 204 10% 90%;
-  --secondary-foreground: 200 6% 18%;
-  --muted: 204 10% 92%;
-  --muted-foreground: 203 5% 45%;
-  --accent: 203 15% 88%;
-  --accent-foreground: 200 6% 18%;
+  --secondary: 220 9% 94%;
+  --secondary-foreground: 220 9% 14%;
+  --muted: 220 9% 96%;
+  --muted-foreground: 220 6% 44%;
+  --accent: 210 15% 92%;
+  --accent-foreground: 220 9% 14%;
   
-  /* PayPal Error Red #d20000 */
-  --destructive: 0 100% 41%;
+  /* PayPal Error Red */
+  --destructive: 0 84% 50%;
   --destructive-foreground: 0 0% 100%;
   
-  --input: 204 10% 79%;
-  --ring: 203 100% 37%;
-  --chart-1: 203 100% 35%;
+  --input: 220 9% 75%;
+  --ring: 210 100% 44%;
+  --chart-1: 210 100% 44%;
   --chart-2: 200 95% 38%;
   --chart-3: 185 85% 35%;
   --chart-4: 170 75% 32%;
   --chart-5: 155 65% 30%;
   
-  /* PayPal Typography */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* PayPal Pro Typography - Based on Futura/Helvetica */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
-  --radius: .25rem;
-  --shadow-2xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
-  --shadow-xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
-  --shadow-sm: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 1px 2px -1px hsl(0 0% 0% / 0.00);
-  --shadow: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 1px 2px -1px hsl(0 0% 0% / 0.00);
-  --shadow-md: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 2px 4px -1px hsl(0 0% 0% / 0.00);
-  --shadow-lg: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 4px 6px -1px hsl(0 0% 0% / 0.00);
-  --shadow-xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 8px 10px -1px hsl(0 0% 0% / 0.00);
-  --shadow-2xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
+  --radius: .375rem;
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.06);
+  --shadow-sm: 0px 2px 4px -1px hsl(0 0% 0% / 0.06), 0px 1px 2px -1px hsl(0 0% 0% / 0.04);
+  --shadow: 0px 4px 6px -1px hsl(0 0% 0% / 0.06), 0px 2px 4px -1px hsl(0 0% 0% / 0.04);
+  --shadow-md: 0px 6px 10px -1px hsl(0 0% 0% / 0.08), 0px 3px 6px -1px hsl(0 0% 0% / 0.04);
+  --shadow-lg: 0px 10px 15px -3px hsl(0 0% 0% / 0.08), 0px 4px 6px -2px hsl(0 0% 0% / 0.04);
+  --shadow-xl: 0px 20px 25px -5px hsl(0 0% 0% / 0.08), 0px 10px 10px -5px hsl(0 0% 0% / 0.02);
+  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.2);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 
-  /* PayPal Card Shadow */
-  --paypal-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  /* PayPal Card Shadow - 2024 Subtle */
+  --paypal-card-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
 
   /* Fallback for older browsers */
   --sidebar-primary-border: hsl(var(--sidebar-primary));
@@ -109,50 +109,50 @@
   --opaque-button-border-intensity: 9;
   --elevate-1: rgba(255,255,255, .04);
   --elevate-2: rgba(255,255,255, .09);
-  --background: 0 0% 8%;
+  --background: 220 10% 6%;
   --foreground: 0 0% 98%;
-  --border: 0 0% 18%;
-  --card: 0 0% 10%;
+  --border: 220 10% 18%;
+  --card: 220 10% 8%;
   --card-foreground: 0 0% 98%;
-  --card-border: 0 0% 14%;
-  --sidebar: 0 0% 12%;
+  --card-border: 220 10% 14%;
+  --sidebar: 220 10% 10%;
   --sidebar-foreground: 0 0% 98%;
-  --sidebar-border: 0 0% 16%;
-  --sidebar-primary: 203 100% 55%;
+  --sidebar-border: 220 10% 16%;
+  --sidebar-primary: 210 100% 55%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 0 0% 16%;
+  --sidebar-accent: 220 10% 16%;
   --sidebar-accent-foreground: 0 0% 98%;
-  --sidebar-ring: 203 100% 55%;
-  --popover: 0 0% 14%;
+  --sidebar-ring: 210 100% 55%;
+  --popover: 220 10% 12%;
   --popover-foreground: 0 0% 98%;
-  --popover-border: 0 0% 18%;
-  --primary: 203 100% 45%;
+  --popover-border: 220 10% 18%;
+  --primary: 210 100% 50%;
   --primary-foreground: 0 0% 100%;
-  --primary-dark: 219 100% 35%;
-  --secondary: 0 0% 18%;
+  --primary-dark: 220 100% 35%;
+  --secondary: 220 10% 18%;
   --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 16%;
-  --muted-foreground: 203 30% 75%;
-  --accent: 203 10% 20%;
+  --muted: 220 10% 14%;
+  --muted-foreground: 220 6% 65%;
+  --accent: 210 10% 20%;
   --accent-foreground: 0 0% 98%;
-  --destructive: 0 84% 45%;
+  --destructive: 0 84% 55%;
   --destructive-foreground: 0 0% 100%;
-  --input: 0 0% 35%;
-  --ring: 203 100% 55%;
-  --chart-1: 203 100% 70%;
-  --chart-2: 200 95% 65%;
-  --chart-3: 185 85% 60%;
-  --chart-4: 170 75% 55%;
-  --chart-5: 155 65% 50%;
-  --shadow-2xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
-  --shadow-xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
-  --shadow-sm: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 1px 2px -1px hsl(0 0% 0% / 0.00);
-  --shadow: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 1px 2px -1px hsl(0 0% 0% / 0.00);
-  --shadow-md: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 2px 4px -1px hsl(0 0% 0% / 0.00);
-  --shadow-lg: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 4px 6px -1px hsl(0 0% 0% / 0.00);
-  --shadow-xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.00), 0px 8px 10px -1px hsl(0 0% 0% / 0.00);
-  --shadow-2xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.00);
-  --paypal-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --input: 220 10% 35%;
+  --ring: 210 100% 55%;
+  --chart-1: 210 100% 65%;
+  --chart-2: 200 95% 60%;
+  --chart-3: 185 85% 55%;
+  --chart-4: 170 75% 50%;
+  --chart-5: 155 65% 45%;
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.2);
+  --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.3);
+  --shadow-sm: 0px 2px 4px -1px hsl(0 0% 0% / 0.3), 0px 1px 2px -1px hsl(0 0% 0% / 0.2);
+  --shadow: 0px 4px 6px -1px hsl(0 0% 0% / 0.3), 0px 2px 4px -1px hsl(0 0% 0% / 0.2);
+  --shadow-md: 0px 6px 10px -1px hsl(0 0% 0% / 0.35), 0px 3px 6px -1px hsl(0 0% 0% / 0.2);
+  --shadow-lg: 0px 10px 15px -3px hsl(0 0% 0% / 0.35), 0px 4px 6px -2px hsl(0 0% 0% / 0.2);
+  --shadow-xl: 0px 20px 25px -5px hsl(0 0% 0% / 0.35), 0px 10px 10px -5px hsl(0 0% 0% / 0.1);
+  --shadow-2xl: 0px 25px 50px -12px hsl(0 0% 0% / 0.5);
+  --paypal-card-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
 
   /* Fallback for older browsers */
   --sidebar-primary-border: hsl(var(--sidebar-primary));
@@ -193,40 +193,71 @@
   }
 }
 
-/* PayPal-specific styles */
+/* PayPal 2024 Component Styles - Sharper, Modern */
 @layer components {
   .paypal-input {
-    @apply w-full h-12 px-4 text-[15px] border border-[#cbd2d6] rounded bg-white text-[#2c2e2f] placeholder-[#9da3a6] transition-all duration-200;
+    @apply w-full h-[52px] px-4 text-base border-2 border-[#c4c4c4] rounded-md bg-white text-[#1a1a1a] placeholder-[#6c7378] transition-all duration-150 focus:outline-none focus:border-[#0070e0] focus:ring-0;
   }
   
-  .paypal-input:focus {
-    @apply outline-none border-2 border-[#0070ba];
+  .paypal-input:hover:not(:focus) {
+    @apply border-[#a0a0a0];
   }
   
   .paypal-btn-primary {
-    @apply w-full h-12 rounded-full bg-[#0070ba] text-white font-medium text-[15px] transition-colors duration-200;
-  }
-  
-  .paypal-btn-primary:hover {
-    @apply bg-[#003087];
+    @apply w-full h-[52px] rounded-full bg-[#0070e0] text-white font-semibold text-base transition-all duration-150 hover:bg-[#003087] active:bg-[#001c64] disabled:opacity-50 disabled:cursor-not-allowed;
   }
   
   .paypal-btn-secondary {
-    @apply w-full h-12 rounded-full bg-white text-[#2c2e2f] font-medium text-[15px] border border-[#2c2e2f] transition-colors duration-200;
+    @apply w-full h-[52px] rounded-full bg-transparent text-[#0070e0] font-semibold text-base border-2 border-[#0070e0] transition-all duration-150 hover:bg-[#f5f9fc] active:bg-[#e5f1fa];
   }
   
-  .paypal-btn-secondary:hover {
-    @apply bg-[#f5f7fa];
+  .paypal-btn-text {
+    @apply bg-transparent text-[#0070e0] font-medium text-sm transition-colors duration-150 hover:text-[#003087] hover:underline;
   }
   
   .paypal-link {
-    @apply text-[#0070ba] hover:underline cursor-pointer;
+    @apply text-[#0070e0] font-medium hover:text-[#003087] hover:underline cursor-pointer transition-colors duration-150;
   }
   
   .paypal-card {
-    @apply bg-white rounded-lg p-8;
+    @apply bg-white rounded-xl p-8;
     box-shadow: var(--paypal-card-shadow);
   }
+  
+  .paypal-divider {
+    @apply flex items-center gap-4 my-6;
+  }
+  
+  .paypal-divider::before,
+  .paypal-divider::after {
+    content: "";
+    @apply flex-1 h-px bg-[#e0e0e0];
+  }
+}
+
+/* Dark mode adjustments for PayPal components */
+.dark .paypal-input {
+  @apply bg-[#1a1a1a] border-[#3d3d3d] text-white placeholder-[#8f8f8f];
+}
+
+.dark .paypal-input:hover:not(:focus) {
+  @apply border-[#5a5a5a];
+}
+
+.dark .paypal-input:focus {
+  @apply border-[#0070e0];
+}
+
+.dark .paypal-card {
+  @apply bg-[#1a1a1a];
+}
+
+.dark .paypal-btn-secondary {
+  @apply text-[#4da3ff] border-[#4da3ff] hover:bg-[#1a2a3a] active:bg-[#1a3550];
+}
+
+.dark .paypal-link {
+  @apply text-[#4da3ff] hover:text-[#80c0ff];
 }
 
 /**

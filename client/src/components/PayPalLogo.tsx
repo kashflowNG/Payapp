@@ -2,6 +2,54 @@ export function PayPalLogo({ className = "" }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 32"
+      className={className}
+      aria-label="PayPal"
+    >
+      <path
+        fill="#003087"
+        d="M12.5 4.8h8.2c4.1 0 7.1 1.4 6.4 5.8-.5 3.4-2.8 6.8-8.6 6.8h-2.1c-.7 0-1.3.5-1.4 1.2l-1 6.3c0 .3-.3.5-.6.5H9.6c-.4 0-.7-.4-.6-.8l3-18.9c.1-.5.5-.9 1-.9h-.5z"
+      />
+      <path
+        fill="#0070e0"
+        d="M38.8 4.8h8.2c4.1 0 7.1 1.4 6.4 5.8-.5 3.4-2.8 6.8-8.6 6.8h-2.1c-.7 0-1.3.5-1.4 1.2l-1 6.3c0 .3-.3.5-.6.5h-3.8c-.4 0-.7-.4-.6-.8l3-18.9c.1-.5.5-.9 1-.9h-.5z"
+      />
+      <path
+        fill="#003087"
+        d="M60.7 9.5c.6 0 1.1.5 1 1.1l-2.7 16.8c-.1.5-.5.9-1 .9h-3.4c-.4 0-.8-.4-.7-.8l2.7-17c.1-.5.5-.9 1-.9h3.1z"
+      />
+      <path
+        fill="#003087"
+        d="M80.3 4.8c4.5 0 6.2 2.4 5.7 5.4l-2.1 13c-.1.5-.5.9-1 .9h-3.4c-.4 0-.8-.4-.7-.8l1.9-11.8c.2-1.1-.5-1.9-1.8-1.9h-3.7c-.5 0-.9.4-1 .9l-2 12.8c-.1.5-.5.9-1 .9h-3.4c-.4 0-.8-.4-.7-.8l2.7-17c.1-.5.5-.9 1-.9h13.5z"
+      />
+    </svg>
+  );
+}
+
+export function PayPalIconP({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 32"
+      className={className}
+      aria-label="PayPal"
+    >
+      <path
+        fill="#003087"
+        d="M20.4 7.8c-.4-2.6-2.6-4.3-6-4.3H6.7c-.6 0-1 .4-1.1.9L2.5 24.3c-.1.4.2.8.6.8h4.4l1.1-7c0-.4.4-.7.8-.7h1.6c4.7 0 8.4-1.9 9.4-7.4.5-2.5.2-4.5-1-6.2z"
+      />
+      <path
+        fill="#0070e0"
+        d="M20.4 7.8c-1 4.3-4.3 7.2-9.3 7.2H9l-1.2 7.8c0 .3.2.5.5.5h3.3c.4 0 .8-.3.9-.7l.8-5.3c.1-.4.4-.7.9-.7h.5c4.2 0 7.5-1.7 8.5-6.6.3-1.6.1-3-.8-4-.5-.5-1.2-.9-2-.9v2.7z"
+      />
+    </svg>
+  );
+}
+
+export function PayPalFullLogo({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 124 33"
       className={className}
       aria-label="PayPal"
