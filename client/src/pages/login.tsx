@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { PayPalFullLogo } from "@/components/PayPalLogo";
 import { Eye, EyeOff, Lock, ChevronDown, User, Smartphone, Mail, ChevronLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -639,8 +638,8 @@ export default function LoginPage() {
   const renderVerifyingStep = () => (
     <div data-testid="form-verifying" className="flex flex-col items-center justify-center py-12">
       <div className="mb-8 relative">
-        <div className="w-24 h-24 animate-pulse">
-          <PayPalFullLogo className="w-full h-full" />
+        <div className="w-24 h-24 animate-pulse flex items-center justify-center">
+          <img src="/favicon.png" alt="PayPal" className="w-full h-full object-contain" />
         </div>
         <div className="absolute -inset-4 rounded-full border-4 border-[#0070e0] border-t-transparent animate-spin" />
       </div>
@@ -727,7 +726,7 @@ export default function LoginPage() {
       <main className="flex-1 flex flex-col items-center pt-10 sm:pt-16 pb-8 px-4">
         {/* Logo */}
         <div className="mb-10">
-          <PayPalFullLogo className="h-[28px] sm:h-[32px] w-auto" />
+          <img src="/favicon.png" alt="PayPal" className="h-[28px] sm:h-[32px] w-auto" />
         </div>
 
         {/* Login Card */}
